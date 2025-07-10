@@ -3,6 +3,7 @@ package com.sushil.main.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sushil.main.DTO.UserForm;
@@ -12,10 +13,11 @@ import com.sushil.main.helper.MessageType;
 import com.sushil.main.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
@@ -23,6 +25,11 @@ public class PageController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/")
+    public String index(){
+        return "redirect:/home";
+    }
 
     @RequestMapping("/home")
     public String home(Model model){
@@ -69,8 +76,13 @@ public class PageController {
     } 
 
     @PostMapping("/do-register")
-    public String submitFormData(@ModelAttribute UserForm userForm,HttpSession session){
+    public String submitFormData(@Valid @ModelAttribute UserForm userForm,BindingResult result ,HttpSession session){
         
+        //validation
+        if (result.hasErrors()) {
+            return "register";
+        }
+
         User user = new User();
 
         user.setName(userForm.getName());

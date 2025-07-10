@@ -1,9 +1,11 @@
 package com.sushil.main.services.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sushil.main.entities.User;
@@ -17,8 +19,17 @@ public class UserServiceImpl implements UserService{
     @Autowired 
     private UserRepository userRepository;
 
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
+    // @Autowired
+	// private JwtService jwtService;
+
     @Override
     public User saveUser(User user) {
+
+        user.setPassword(encoder.encode(user.getPassword()));
+		user.setRoles(Arrays.asList("ROLE_USER"));
+		
         return userRepository.save(user);
     }
 

@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,6 +34,9 @@ public class User {
     private boolean enabled;
     private boolean emailVerified;
     private boolean phoneVerified;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
